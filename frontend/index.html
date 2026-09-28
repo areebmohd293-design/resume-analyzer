@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AI Resume Analyzer</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+<body>
+
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+    <div class="app">
+
+        <!-- NAVBAR -->
+
+        <nav class="navbar">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    ✦
+                </div>
+
+                <div>
+                    <strong>ResumeAI</strong>
+                    <span>Analyzer</span>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                id="themeButton"
+                class="theme-button"
+            >
+                ☀
+            </button>
+
+        </nav>
+
+
+        <!-- HERO -->
+
+        <header class="hero">
+
+            <div class="badge">
+                <span class="status-dot"></span>
+                AI-Powered Resume Analysis
+            </div>
+
+            <h1>
+                Make your resume
+                <span>job-ready.</span>
+            </h1>
+
+            <p>
+                Upload your resume, add a job description,
+                and let AI discover your strengths,
+                missing skills and improvement opportunities.
+            </p>
+
+        </header>
+
+
+        <!-- MAIN FORM -->
+
+        <section class="workspace">
+
+            <form id="resumeForm">
+
+                <!-- RESUME -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <span class="step">01</span>
+
+                            <div>
+                                <h2>Upload your resume</h2>
+                                <p>PDF format recommended</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <label
+                        for="resume"
+                        id="dropZone"
+                        class="upload-zone"
+                    >
+
+                        <input
+                            type="file"
+                            id="resume"
+                            accept=".pdf"
+                            hidden
+                        >
+
+                        <div class="upload-icon">
+                            ↑
+                        </div>
+
+                        <strong id="uploadText">
+                            Drop your resume here
+                        </strong>
+
+                        <span>
+                            or click to browse your files
+                        </span>
+
+                        <small>
+                            PDF • Max recommended size: 5MB
+                        </small>
+
+                    </label>
+
+                </div>
+
+
+                <!-- JOB DESCRIPTION -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <span class="step">02</span>
+
+                            <div>
+                                <h2>Job description</h2>
+                                <p>Paste the role you're applying for</p>
+                            </div>
+                        </div>
+
+                        <button
+                            type="button"
+                            id="sampleJob"
+                            class="small-button"
+                        >
+                            Use sample
+                        </button>
+
+                    </div>
+
+
+                    <textarea
+                        id="jobDescription"
+                        placeholder="Paste the job description here..."
+                        required
+                    ></textarea>
+
+
+                    <div class="textarea-footer">
+
+                        <span id="characterCount">
+                            0 characters
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ANALYZE -->
+
+                <button
+                    type="submit"
+                    id="analyzeButton"
+                    class="analyze-button"
+                >
+
+                    <span>
+                        Analyze my resume
+                    </span>
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- LOADING -->
+
+        <section
+            id="loading"
+            class="loading hidden"
+        >
+
+            <div class="loader"></div>
+
+            <div>
+                <strong>AI is analyzing your resume...</strong>
+
+                <p>
+                    Extracting skills and generating insights
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- ERROR -->
+
+        <div
+            id="error"
+            class="error hidden"
+        ></div>
+
+
+        <!-- RESULTS -->
+
+        <section
+            id="results"
+            class="results hidden"
+        >
+
+            <div class="results-heading">
+
+                <div>
+                    <span class="eyebrow">
+                        ANALYSIS COMPLETE
+                    </span>
+
+                    <h2>
+                        Your resume insights
+                    </h2>
+                </div>
+
+                <div class="success-icon">
+                    ✓
+                </div>
+
+            </div>
+
+
+            <!-- SCORE -->
+
+            <div class="score-panel">
+
+                <div class="score-circle">
+
+                    <svg viewBox="0 0 120 120">
+
+                        <circle
+                            class="score-bg"
+                            cx="60"
+                            cy="60"
+                            r="50"
+                        ></circle>
+
+                        <circle
+                            id="scoreProgress"
+                            class="score-progress"
+                            cx="60"
+                            cy="60"
+                            r="50"
+                        ></circle>
+
+                    </svg>
+
+                    <div class="score-value">
+
+                        <strong id="score">
+                            0%
+                        </strong>
+
+                        <span>match</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="score-info">
+
+                    <span class="eyebrow">
+                        RESUME MATCH
+                    </span>
+
+                    <h3>
+                        Keyword compatibility
+                    </h3>
+
+                    <p>
+                        Your score is based on how closely
+                        your resume keywords match the
+                        requirements in the job description.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- KEYWORDS -->
+
+            <div class="keyword-grid">
+
+                <div class="result-card">
+
+                    <div class="result-card-title">
+                        <span class="green-dot"></span>
+                        Matching keywords
+                    </div>
+
+                    <div
+                        id="matchingKeywords"
+                        class="keywords"
+                    ></div>
+
+                </div>
+
+
+                <div class="result-card">
+
+                    <div class="result-card-title">
+                        <span class="orange-dot"></span>
+                        Missing keywords
+                    </div>
+
+                    <div
+                        id="missingKeywords"
+                        class="keywords"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- AI FEEDBACK -->
+
+            <div class="ai-panel">
+
+                <div class="ai-header">
+
+                    <div class="ai-icon">
+                        ✦
+                    </div>
+
+                    <div>
+
+                        <span class="eyebrow">
+                            AI INSIGHTS
+                        </span>
+
+                        <h3>
+                            Personalized feedback
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="aiFeedback"
+                    class="ai-feedback"
+                ></div>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="analyzeAnother"
+                class="secondary-button"
+            >
+                ← Analyze another resume
+            </button>
+
+        </section>
+
+
+        <footer>
+
+            <span>
+                Built with
+                <strong>Python</strong>,
+                <strong>FastAPI</strong>
+                & <strong>Ollama</strong>
+            </span>
+
+        </footer>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
